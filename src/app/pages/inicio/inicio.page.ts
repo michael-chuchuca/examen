@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 import { ComponentsModule } from '../../components/components.module';
+import { Observable } from 'rxjs';
+import { DataService } from '../../services/data.service';
+
 //Crear una interface para definir propiedades que el componente lista va a tener
-interface Componente{
+interface Componente {
   icon: string;
   name: string;
-  redirecTo: string;
+  redirectTo: string;
 }
 
 @Component({
@@ -13,24 +17,16 @@ interface Componente{
   styleUrls: ['./inicio.page.scss'],
 })
 export class InicioPage implements OnInit {
-// craer nuevo listado
-
-//componentes any[] = [];
-componentes: Componente[]= [
-  {
-    icon: 'american-football-outline',
-    name: 'Action Sheet',
-    redirecTo: '/action-sheet'
-  },
-  {
-    icon: 'logo-apple-appstore',
-    name: 'Alert',
-    redirecTo: '/alert'
-  },
-];
-  constructor() { }
-
-  ngOnInit() {
+  componentes: Observable<Componente[]>;
+  constructor(private menuCtrl: MenuController,
+      private dataService: DataService) { }
+  
+    ngOnInit() {
+      this.componentes = this.dataService.getMenuOpts();
+    }
+  mostrarMenu() {
+    this.menuCtrl.open('first');
   }
 
 }
+
